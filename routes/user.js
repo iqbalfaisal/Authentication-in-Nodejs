@@ -1,5 +1,5 @@
 const express = require("express");
-const { check, validationResult } = require("express-validator/check");
+const { check, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
@@ -130,3 +130,5 @@ router.get("/me", auth, async (req, res) => {
     res.send({ message: "Error in Fetching user" });
   }
 });
+
+module.exports = router;
