@@ -1,5 +1,5 @@
 const express = require("express");
-const { check, validationResult } = require("express-validator");
+const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
@@ -9,13 +9,14 @@ const auth = require("../middleware/auth");
 router.post(
   "/signup",
   [
-    check("username", "Please Enter a Valid Username").not().isEmpty(),
-    check("email", "Please enter a valid email").isEmail(),
-    check("password", "Please enter a valid password").isLength({
+    body("username", "Please Enter a Valid Username").not().isEmpty(),
+    body("email", "Please enter a valid email").isEmail(),
+    body("password", "Please enter a valid password").isLength({
       min: 6,
     }),
   ],
   async (req, res) => {
+    console.log(req.body);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({
@@ -68,8 +69,8 @@ router.post(
 router.post(
   "/login",
   [
-    check("email", "Please enter a valid email").isEmail(),
-    check("password", "Please enter a valid password").isLength({
+    body("email", "Please enter a valid email").isEmail(),
+    body("password", "Please enter a valid password").isLength({
       min: 6,
     }),
   ],
@@ -78,6 +79,7 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({
         errors: errors.array(),
+        body: req.body,
       });
     }
     const { email, password } = req.body;
